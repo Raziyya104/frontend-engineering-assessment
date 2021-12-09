@@ -1,0 +1,10 @@
+.BodyWordCloud {
+    display: flex;
+    flex-direction: column;
+    user-select: none;
+}
+
+.BodyWordCloud svg {
+    margin: 1rem 0;
+    cursor: pointer;
+}

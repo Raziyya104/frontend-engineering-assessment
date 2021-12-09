@@ -36,3 +36,7 @@ export function getDataMatrix(posts: Post[]): number[][] {
 
     return dataMatrix;
 }
+
+export function getRawWords(posts: Post[]): string {
+    return posts.map(({ body }) => body).join(' ');
+}

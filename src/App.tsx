@@ -1,7 +1,8 @@
 import { useQuery } from '@apollo/client';
 import React from 'react';
 import './App.css';
-import { getDataMatrix, getLatestPosts } from './app.data';
+import { getDataMatrix, getLatestPosts, getRawWords } from './app.data';
+import BodyWordCloud from './components/BodyWordCloud/BodyWordCloud';
 import Card from './components/Card/Card';
 import TopicChord from './components/TopicChord/TopicChord';
 import { AllPosts, ALL_POSTS, Post } from './Queries/ALL_POSTS';
@@ -35,6 +36,8 @@ function App() {
 
     const latestUserPosts = getLatestPosts(userData[userId], 3);
     const dataMatrix = getDataMatrix(userData[userId]);
+    const rawWords = getRawWords(userData[userId]);
+
     const userCards = latestUserPosts.map((post) => (
         <Card key={post.id} className="User-card">
             <p>
@@ -54,10 +57,16 @@ function App() {
             <header className="Chart-list">
                 <Card className="Chart-card"></Card>
                 <Card className="Chart-card"></Card>
-                <Card className="Chart-card"></Card>
                 <Card className="Chart-card">
                     <TopicChord
                         dataMatrix={dataMatrix}
+                        width={650}
+                        height={400}
+                    />
+                </Card>
+                <Card className="Chart-card">
+                    <BodyWordCloud
+                        rawWords={rawWords}
                         width={650}
                         height={400}
                     />
