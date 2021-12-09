@@ -1,9 +1,15 @@
 import { useQuery } from '@apollo/client';
 import React from 'react';
 import './App.css';
-import { getDataMatrix, getLatestPosts, getRawWords } from './app.data';
+import {
+    getBarData,
+    getDataMatrix,
+    getLatestPosts,
+    getRawWords,
+} from './app.data';
 import BodyWordCloud from './components/BodyWordCloud/BodyWordCloud';
 import Card from './components/Card/Card';
+import TopicBar from './components/TopicBar/TopicBar';
 import TopicChord from './components/TopicChord/TopicChord';
 import { AllPosts, ALL_POSTS, Post } from './Queries/ALL_POSTS';
 
@@ -25,9 +31,9 @@ function App() {
         (previous, post) => {
             if (!previous[post.author.id]) {
                 previous[post.author.id] = [];
-            } else {
-                previous[post.author.id].push(post);
             }
+
+            previous[post.author.id].push(post);
 
             return previous;
         },
@@ -37,6 +43,7 @@ function App() {
     const latestUserPosts = getLatestPosts(userData[userId], 3);
     const dataMatrix = getDataMatrix(userData[userId]);
     const rawWords = getRawWords(userData[userId]);
+    const barData = getBarData(userData[userId]);
 
     const userCards = latestUserPosts.map((post) => (
         <Card key={post.id} className="User-card">
@@ -55,8 +62,6 @@ function App() {
             </div>
 
             <header className="Chart-list">
-                <Card className="Chart-card"></Card>
-                <Card className="Chart-card"></Card>
                 <Card className="Chart-card">
                     <TopicChord
                         dataMatrix={dataMatrix}
@@ -70,6 +75,9 @@ function App() {
                         width={650}
                         height={400}
                     />
+                </Card>
+                <Card className="Chart-card Chart-card--double-width">
+                    <TopicBar data={barData} width={1340} height={400} />
                 </Card>
             </header>
         </div>

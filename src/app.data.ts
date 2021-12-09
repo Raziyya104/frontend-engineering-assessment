@@ -1,5 +1,13 @@
 import { Post } from './Queries/ALL_POSTS';
 
+function getUniqueUserTopics(posts: Post[]) {
+    const userTopics: string[] = posts.flatMap((post) =>
+        post.likelyTopics.map((topic) => topic.label)
+    );
+
+    return userTopics.filter((topic, i) => userTopics.indexOf(topic) === i);
+}
+
 export function getLatestPosts(posts: Post[], count: number) {
     return [...posts]
         .sort((a, b) => b.createdAt.localeCompare(a.createdAt))
@@ -7,13 +15,7 @@ export function getLatestPosts(posts: Post[], count: number) {
 }
 
 export function getDataMatrix(posts: Post[]): number[][] {
-    const userTopics: string[] = posts.flatMap((post) =>
-        post.likelyTopics.map((topic) => topic.label)
-    );
-
-    const uniqueUserTopics: string[] = userTopics.filter(
-        (topic, i) => userTopics.indexOf(topic) === i
-    );
+    const uniqueUserTopics = getUniqueUserTopics(posts);
 
     const dataMatrix: number[][] = new Array(uniqueUserTopics.length)
         .fill([])
@@ -39,4 +41,29 @@ export function getDataMatrix(posts: Post[]): number[][] {
 
 export function getRawWords(posts: Post[]): string {
     return posts.map(({ body }) => body).join(' ');
+}
+
+export function getBarData(posts: Post[]): Record<string, any>[] {
+    const monthData: Record<string, Record<string, any>> = [...posts]
+        .sort((a, b) => a.createdAt.localeCompare(b.createdAt))
+        .reduce((previous, post) => {
+            const date = new Date(parseInt(post.createdAt));
+            const month = `${date.getMonth()} ${date.getFullYear()}`;
+
+            if (!previous[month]) {
+                previous[month] = { date: month };
+            }
+
+            for (const topic of post.likelyTopics) {
+                if (!previous[month][topic.label]) {
+                    previous[month][topic.label] = 0;
+                }
+
+                previous[month][topic.label]++;
+            }
+
+            return previous;
+        }, {} as Record<string, Record<string, any>>);
+
+    return Object.values(monthData);
 }
