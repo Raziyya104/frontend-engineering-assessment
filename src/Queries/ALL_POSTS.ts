@@ -14,7 +14,7 @@ export interface Post {
     likelyTopics: [Topic];
 }
 export interface User {
-    id: number;
+    id: string;
     firstName: string;
     lastName: string;
     email: string;

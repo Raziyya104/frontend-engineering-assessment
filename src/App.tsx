@@ -1,5 +1,5 @@
 import { useQuery } from '@apollo/client';
-import React from 'react';
+import React, { useState } from 'react';
 import './App.css';
 import {
     getBarData,
@@ -15,6 +15,7 @@ import { AllPosts, ALL_POSTS, Post } from './Queries/ALL_POSTS';
 
 function App() {
     const { data, loading, error } = useQuery<AllPosts>(ALL_POSTS);
+    const [userId, setUserId] = useState<string>();
 
     if (loading) {
         return <span>Loading...</span>;
@@ -24,8 +25,13 @@ function App() {
         return <span>Error: {error}</span>;
     }
 
-    const user = data!.allPosts[0].author;
-    const userId = user.id;
+    const users = data!.allPosts.map((post) => post.author);
+    const uniqueUsers = users.filter((user, i) => users.indexOf(user) === i);
+
+    if (!userId) {
+        setUserId(uniqueUsers[0].id);
+        return <span>Loading...</span>;
+    }
 
     const userData: Record<string, Post[]> | undefined = data!.allPosts.reduce(
         (previous, post) => {
@@ -45,6 +51,12 @@ function App() {
     const rawWords = getRawWords(userData[userId]);
     const barData = getBarData(userData[userId]);
 
+    const userOptions = uniqueUsers.map((user) => (
+        <option key={user.id} value={user.id}>
+            {user.id}
+        </option>
+    ));
+
     const userCards = latestUserPosts.map((post) => (
         <Card key={post.id} className="User-card">
             <p>
@@ -57,7 +69,17 @@ function App() {
     return (
         <div className="App">
             <div className="Side-panel">
-                <div className="User">{userId}</div>
+                <div className="User">
+                    <select
+                        value={userId}
+                        onChange={(e) => {
+                            console.log(e);
+                            setUserId((e.target as any).value);
+                        }}
+                    >
+                        {userOptions}
+                    </select>
+                </div>
                 {userCards}
             </div>
 
