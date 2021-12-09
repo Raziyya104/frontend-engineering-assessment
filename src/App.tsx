@@ -1,19 +1,52 @@
 import { useQuery } from '@apollo/client';
 import React from 'react';
 import './App.css';
-import Card from './Card/Card';
-import { ALL_POSTS } from './Queries/ALL_POSTS';
+import { getLatestPosts } from './app.data';
+import Card from './components/Card/Card';
+import { AllPosts, ALL_POSTS, Post } from './Queries/ALL_POSTS';
 
 function App() {
-    const { data } = useQuery(ALL_POSTS);
+    const { data, loading, error } = useQuery<AllPosts>(ALL_POSTS);
+
+    if (loading) {
+        return <span>Loading...</span>;
+    }
+
+    if (error) {
+        return <span>Error: {error}</span>;
+    }
+
+    const user = data!.allPosts[0].author;
+    const userId = user.id;
+
+    const userData: Record<string, Post[]> | undefined = data!.allPosts.reduce(
+        (previous, post) => {
+            if (!previous[post.author.id]) {
+                previous[post.author.id] = [];
+            } else {
+                previous[post.author.id].push(post);
+            }
+
+            return previous;
+        },
+        {} as Record<string, Post[]>
+    );
+
+    const latestUserPosts = getLatestPosts(userData[userId], 3);
+    const userCards = latestUserPosts.map((post) => (
+        <Card key={post.id} className="User-card">
+            <p>
+                <b>{post.title}</b>
+            </p>
+            <p>{post.body}</p>
+        </Card>
+    ));
 
     return (
         <div className="App">
             <div className="Side-panel">
-                <div className="User"></div>
-                <Card className="User-card"></Card>
-                <Card className="User-card"></Card>
-                <Card className="User-card"></Card>
+                <div className="User">{userId}</div>
+                {userCards}
             </div>
 
             <header className="Chart-list">
