@@ -1,0 +1,10 @@
+.TopicChord {
+    display: flex;
+    flex-direction: column;
+    user-select: none;
+}
+
+.TopicChord svg {
+    margin: 1rem 0;
+    cursor: pointer;
+}

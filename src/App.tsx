@@ -1,8 +1,9 @@
 import { useQuery } from '@apollo/client';
 import React from 'react';
 import './App.css';
-import { getLatestPosts } from './app.data';
+import { getDataMatrix, getLatestPosts } from './app.data';
 import Card from './components/Card/Card';
+import TopicChord from './components/TopicChord/TopicChord';
 import { AllPosts, ALL_POSTS, Post } from './Queries/ALL_POSTS';
 
 function App() {
@@ -33,6 +34,7 @@ function App() {
     );
 
     const latestUserPosts = getLatestPosts(userData[userId], 3);
+    const dataMatrix = getDataMatrix(userData[userId]);
     const userCards = latestUserPosts.map((post) => (
         <Card key={post.id} className="User-card">
             <p>
@@ -53,7 +55,13 @@ function App() {
                 <Card className="Chart-card"></Card>
                 <Card className="Chart-card"></Card>
                 <Card className="Chart-card"></Card>
-                <Card className="Chart-card"></Card>
+                <Card className="Chart-card">
+                    <TopicChord
+                        dataMatrix={dataMatrix}
+                        width={650}
+                        height={400}
+                    />
+                </Card>
             </header>
         </div>
     );
