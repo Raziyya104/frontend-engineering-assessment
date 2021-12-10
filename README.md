@@ -1,4 +1,26 @@
-# Getting Started with Create React App
+# Process
+
+I began researching React, Apollo, VX, following some of their starter guides to give me an idea of how to get setup and start building with them.
+
+I then started creating a rough design of how I wanted the page to look and function. Decided on a simple user profile using cards. Felt this would keep it flexible depending on the amount of work I could get done in the time given.
+
+I outlined the page and created a card component to place much of the individual pieces of content inside.
+
+Started the visualisations with a chord diagram and realsied I would need to build up a incidence matrix of the topics. Manipulating the data in this way was difficult, and I felt the library could have offered up other ways to take the data. The word cloud and bar chart were considerably easier to provide data too.
+
+I finished up by using Reacts state management to allow the user to be changed.
+
+I enjoyed working with React, but was unsure of best practices. Coming from an Angular background I am used to knowing the "Angular" way of doing things. I see this as both a pro and a con of React; you are free to go your own way, but success very much depends on your skill and experience in the React space. I would be interested to see what a large scale React app would look like.
+
+I found VX's documentation quite light, really only telling you what was available and what properties each thing had. For this reason I stuck to alterations of their examples, but given more time I would have liked to have crafted something more tailored. I would have also included more labels, tooltips and legends, as it is not very self explanatory in its current state.
+
+I spent relatively little of the time on styling as I wanted to focus on the visualisations. I ideally would have split the App component up a bit more too.
+
+Graphql was an interesting to use, but seeing no way to filter the data in the request hampered me. A way to filter posts by the user would have been very useful.
+
+Overall, I enjoyed working on the app and would use these technologies again.
+
+## Getting Started with Create React App
 
 This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
 
